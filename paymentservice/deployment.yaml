@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paymentservice
+spec:
+  selector:
+    matchLabels:
+      app: paymentservice
+  template:
+    metadata:
+      labels:
+        app: paymentservice
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+      - name: server
+        image: harbor.c0.kube8.ga/boutique/paymentservice:490ec147babcaeb90e87128f7c2c91d2fb10831f
+        ports:
+        - containerPort: 50051
+        env:
+        - name: PORT
+          value: "50051"
+        #readinessProbe:
+        #  exec:
+        #    command: ["/bin/grpc_health_probe", "-addr=:50051"]
+        #livenessProbe:
+        #  exec:
+        #    command: ["/bin/grpc_health_probe", "-addr=:50051"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 64Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
